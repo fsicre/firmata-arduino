@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "test:watch": "nodemon index.js",
     "test": "node index.js",
     "lint": "eslint .",
     "fix": "eslint --fix ."
@@ -15,7 +16,9 @@
     "eslint-config-prettier": "^4.3.0",
     "eslint-plugin-prettier": "^3.1.0",
     "firmata": "^2.0.0",
-    "prettier": "^1.17.1"
+    "nodemon": "^1.19.0",
+    "prettier": "^1.17.1",
+    "sleep-async": "^1.0.5"
   },
   "eslintConfig": {
     "root": true,

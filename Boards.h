@@ -849,6 +849,86 @@ writePort(port, value, bitmask):  Write an 8 bit port.
 #define PIN_TO_SERVO(p)         (p)
 #define DEFAULT_PWM_RESOLUTION  10
 
+// ESP32
+// note: boot mode GPIOs 0, 2 and 15 can be used as outputs, GPIOs 6-11 are in use for flash IO
+// https://randomnerdtutorials.com/esp32-pinout-reference-gpios/
+#elif defined(ESP32)
+#define IO15        15 // PWM // ADC2 // HSPI CLK // TOUCH
+#define IO0         0  // PWM // ADC2 // TOUCH
+//
+#define A5          2  // PWM // ADC2 // TOUCH
+#define A4          4  // PWM // ADC2 // TOUCH
+#define A3          36 // PWM // ADC1 possible 35
+#define A2          34 // PWM // ADC1 
+#define A1          35 // PWM // ADC1 possible 36
+#define A0          39 // PWM // ADC1 
+//
+#define SCL         22 // PWM //
+#define SCA         21 // PWM //
+//
+#define D13         18 // PWM // VSPI CLK
+#define D12         19 // PWM // VSPI MISO
+#define D11         23 // PWM // VSPI MOSI
+#define D10         5  // PWM // VSPI CS0
+#define D9          13 // PWM // HSPI MOSI // TOUCH
+#define D8          12 // PWM // HSPI MISO // TOUCH
+//
+#define D7          14 // PWM // HSPI CLK // TOUCH
+#define D6          27 // PWM // TOUCH
+#define D5          16 // PWM // UART2
+#define D4          17 // PWM // UART2
+#define D3          25 // PWM //
+#define D2          26 // PWM //
+#define TX          1  // PWM // UART0
+#define RX          3  // PWM // UART0
+//
+#define SD0         7   // SPI
+#define SD1         8   // SPI
+#define SD2         9   // SPI
+#define SD3         10  // SPI
+#define CMD         11  // SPI
+#define CLK         6   // SPI
+//
+#define TOTAL_ANALOG_PINS       6
+#define TOTAL_PINS              22
+#define PIN_SERIAL_RX           0
+#define PIN_SERIAL_TX           1
+#define PIN_I2C_SCA             2
+#define PIN_I2C_SCL             3
+#define IS_PIN_DIGITAL(p)       ((p) >= 2 && (p) < TOTAL_PINS)
+#define IS_PIN_ANALOG(p)        ((p) >= TOTAL_PINS-TOTAL_ANALOG_PINS && (p) < TOTAL_PINS)
+#define IS_PIN_PWM(p)           digitalPinHasPWM(p)
+#define IS_PIN_SERVO(p)         (IS_PIN_DIGITAL(p) && (p) - 2 < MAX_SERVOS)
+#define IS_PIN_SPI(p)           ((p) == SS || (p) == MOSI || (p) == MISO || (p) == SCK)
+#define IS_PIN_I2C(p)           ((p) == PIN_I2C_SCA || (p) == PIN_I2C_SCL)
+#define IS_PIN_SERIAL(p)        ((p) == PIN_SERIAL_RX || (p) == PIN_SERIAL_TX)
+#define IS_PIN_INTERRUPT(p)     (digitalPinToInterrupt(p) > NOT_AN_INTERRUPT)
+#define PIN_TO_DIGITAL(p)       ( \
+                                (p)==0 ? RX : \
+                                (p)==1 ? TX : \
+                                (p)==2 ? D2 : \
+                                (p)==3 ? D3 : \
+                                (p)==4 ? D4 : \
+                                (p)==5 ? D5 : \
+                                (p)==6 ? D6 : \
+                                (p)==7 ? D7 : \
+                                (p)==8 ? D8 : \
+                                (p)==9 ? D9 : \
+                                (p)==10 ? D10 : \
+                                (p)==11 ? D11 : \
+                                (p)==12 ? D12 : \
+                                (p)==13 ? D13 : \
+                                (p)==14 ? SCA : SCL )
+#define PIN_TO_ANALOG(p)        ( \
+                                (p)==0 ? A0 : \
+                                (p)==1 ? A1 : \
+                                (p)==2 ? A2 : \
+                                (p)==3 ? A3 : \
+                                (p)==4 ? A4 : A5)
+#define PIN_TO_PWM(p)           PIN_TO_DIGITAL(p)
+#define PIN_TO_SERVO(p)         PIN_TO_DIGITAL((p)-2)
+#define DEFAULT_PWM_RESOLUTION  10
+
 // STM32 based boards
 #elif defined(ARDUINO_ARCH_STM32)
 #define TOTAL_ANALOG_PINS       NUM_ANALOG_INPUTS
